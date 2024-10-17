@@ -4,6 +4,9 @@ import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import CreatePost from './components/CreatePost';
 import Postfeed from './components/Postfeed';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import PostItem from './components/PostItem';
+
 
 
 export const AppContext = createContext();
@@ -11,6 +14,7 @@ export const AppContext = createContext();
 export default function App() {
 
   const [posts, setPosts] = useState([]);
+  const [postWithUserData, setPostWithUserData] = useState([]);
   const [contacts, setContacts] = useState([]);
     
   
@@ -31,21 +35,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const fetchcontacts = async () => {
-      try {
-        const responsecdata = await fetch('https://boolean-uk-api-server.fly.dev/alihaiderkhannn/contact')
-        const jsondata = await responsecdata.json();
-        // console.log(JSON.stringify(jsondata, null, 2))
-        setContacts(jsondata)
-      }
-      catch(error) {
-        console.error("Error fetching the contacts", error)
-      }
-    }
-    fetchcontacts();
-  }, [])
-
-  /* useEffect(() => {
     if (posts.length === 0) return;
 
     const fetchContacts = async () => {
@@ -66,30 +55,42 @@ export default function App() {
           };
         }));
 
-        setPosts(updatedPosts); 
+        setPostWithUserData(updatedPosts); 
       } catch (error) {
         console.error("Error fetching the contacts:", error);
       }
     };
 
     fetchContacts();
-  }, [posts]); */
+  }, [posts]); 
 
-  //console.log(JSON.stringify(posts, null, 2));
+  // console.log(JSON.stringify(posts, null, 2));
 
 
   return (
     
-     <AppContext.Provider value={{ posts, setPosts, contacts, setContacts}}>
+    <Router>
+
+      <AppContext.Provider value={{ posts, postWithUserData, setPostWithUserData, setPosts, contacts, setContacts}}>
       <Header />
       <div className='main-content'>
         <Sidebar />
-        <CreatePost />
-        <Postfeed />
+        <div className='post-feed-container'>
+          <CreatePost />
+
+          <Postfeed />
+          
+          
+          
+          
+        </div>
         
 
       </div>
       </AppContext.Provider >
+
+      </Router>
+     
       
     
   )
